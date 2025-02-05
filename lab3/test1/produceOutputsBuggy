@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 commandToTest testSetFile"
+    exit 1
+fi
+
+command=$1
+test_set=$2
+
+while read -r stem; do
+    input="${stem}.in"
+    args="${stem}.args"
+
+    command_args=$(cat "$args")
+
+    $command $command_args <"$input">${stem}.out
+
+done < "$test_set"
+
+
