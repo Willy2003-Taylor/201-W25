@@ -1,0 +1,23 @@
+#!/bin/bash
+
+command=$1
+test_set=$2
+
+while read -r stem; do
+    input="${stem}.in"
+    args="${stem}.args"
+
+    if [ ! -f "$args" ] && [ -f "$input" ]; then
+        wc < "$input" > ${stem}.out
+	continue
+
+    elif [ ! -f "$input" ] && [ -f "$args" ]; then
+	cat "$args" > ${stem}.out
+	continue
+    fi
+
+    command_args=$(cat "$args")
+
+    $command $command_args < "$input" > ${stem}.out
+
+done < "$test_set"
