@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Check case (a) to see if command argument is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 testSetFile" >&2  # Send the message to stderr
+    exit 1
+fi
+
+while read -r line; do
+    # Check if the .desc file for the current stem exists
+    for stem in $line; do
+        if [[ "$stem"==/* ]]; then # When the testfile name is attached with an absolute path
+
+            if [ -f "${stem}.desc" ]; then
+                cat "${stem}.desc"  # Print out the contents of the .desc file if it exists
+
+            else
+                echo "${stem}: No test description"
+            fi
+        elif [ -f "./$stem.desc" ]; then #When the testfile is in the current path
+       		cat "./${stem}.desc"
+        else
+            echo "${stem}: No test description"  # Print the message if the .desc file doesn't exist
+        fi
+    done
+done < "$1"
