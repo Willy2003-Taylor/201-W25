@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 commandToTest testSetFile"
+    exit 1
+fi
+
+command=$1
+test_set=$2
+
+while read -r stem; do
+    input="${stem}.in"
+    expect="${stem}.out"
+    args="${stem}.args"
+
+    if [ ! -f "$args" ]; then
+	echo "Undetect argument file $args."
+	continue
+    fi
+
+    command_args=$(cat "$args")
+
+    $command $command_args <"$input">temp.txt
+
+    if diff -q temp.txt "$expect" >/dev/null; then
+        echo "Test $stem passed"
+
+    else
+        echo "Test $stem failed"
+	echo "Expected output:"
+	cat "$expect"
+	echo "Actual output:"
+	cat temp.txt
+    fi
+    rm temp.txt
+done < "$test_set"
