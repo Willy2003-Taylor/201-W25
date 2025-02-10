@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Ensure that directory and strings are provided
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 <directory> <search_string> <replace_string>"
+    exit 1
+fi
+
+directory="$1"
+search_str="$2"
+replace_str="$3"
+
+modified_count=0
+for file in "$directory"/*.txt; do
+    if [ -f "$file" ]; then
+	if grep -q "$search_str" "$file"; then
+	    # Replace the search string with the replace string
+	    sed -i "s/$search_str/$replace_str/g" "$file"
+	    echo "Modified $file"
+	    ((modified_count++))
+	fi
+    fi
+done
+
+if [ "$modified_count" -eq 0 ]; then
+    echo "No files are modified."
+else
+    echo "$modified_count files were modified"
+fi
