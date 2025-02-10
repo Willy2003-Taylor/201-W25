@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Ensure that a directory argument is provided
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+source_dir="$1"
+backup_dir="./backup"
+
+# Create a backup directory if it doesn't exist
+
+mkdir -p "$backup_dir"
+
+backup_count=0
+
+# Find all .txt files in specified directory and copy to the backup directory
+
+for file in "$source_dir"/*.txt; do
+    if [ -f "$file" ]; then
+        cp "$file" "$backup_dir"
+	((backup_count++))
+    fi
+done
+
+echo "backup completed. $backup_count .txt files are copied from $source_dir to $backup_dir."
