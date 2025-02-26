@@ -3,7 +3,7 @@
 int binary_hamming_dis(unsigned x, unsigned y){
     int distance = 0;
 
-    unsigned flag = x ^ y; // will be combined as a binary number and be converted to decimal
+    unsigned flag = x ^ y; // XOR operation, will be combined as a binary number and be converted to decimal
 
     while(flag != 0){
         distance = distance + flag & 1;
